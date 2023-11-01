@@ -19,9 +19,10 @@ $ npm add @types/mongodb
 $ npm i class-validator --save
 $ npm i class-transformer --save
 $ npm i --save @nestjs/swagger
+$ npm install @nestjs/elasticsearch @elastic/elasticsearch
 ```
 
-## Running the app
+## Running the app on localhost
 
 ```bash
 # development
@@ -34,6 +35,10 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+### Swagger UI on localhost
+
+http://localhost:3000/api
+
 ## Test
 
 ```bash
@@ -45,4 +50,10 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Deployment on docker containers
+
+```bash
+$ docker-compose up
 ```

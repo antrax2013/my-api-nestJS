@@ -1,0 +1,149 @@
+version: '3'
+name: nest-mongo-api
+services:
+  nestjs-api:
+    container_name: nestjs-api
+    build:
+      dockerfile: docker/apiDocker/Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+      target: development
+    volumes:
+      - .:/usr/src/app
+    env_file:
+    - .env
+    # Run a command against the development stage of the image
+    command: npm run start
+    ports:
+      - 3000:3000
+    networks:
+      - my_api_network
+    depends_on:
+      - mongodb-service
+  
+  mongodb-service:
+    container_name: mongodb-server
+    image: mongo
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/animals
+      # - ./scripts/mongo-init.sh:/etc/mongo/mongo-init.sh
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      #- ./scripts/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+    ports:
+      - 27017:27017
+    environment:
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      - 'MONGO_INITDB_ROOT_PASSWORD=595Hh95GU95aHaEnsaLS'
+      - 'MONGO_INITDB_DATABASE=admin'
+    #command:  
+    #  /bin/sh /etc/mongo/mongo-create-user.sh;
+    #  [--auth]
+    networks:
+      - my_api_network
+      
+  elastic-service:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.14
+    container_name: elastic-search
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      ES_JAVA_OPTS: '-Xms256m -Xmx256m'
+      network.bind_host: 0.0.0.0
+      network.host: 0.0.0.0
+      discovery.type: single-node
+      xpack.security.enabled: true
+    networks:
+      - my_api_network
+
+  # kibana:
+  #   container_name: kibana
+  #   depends_on: [elastic-service]
+  #   image: docker.elastic.co/kibana/kibana:7.9.1
+  #   environment:
+  #     - ELASTICSEARCH_USERNAME=elastic
+  #     - ELASTICSEARCH_PASSWORD=MyPassword
+  #     - ELASTICSEARCH_HOSTS=http://host.docker.internal:9201
+  #   ports:
+  #     - "5601:5601"
+
+
+  # es01:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+  #   container_name: es01
+  #   environment:
+  #     - node.name=es01
+  #     - cluster.name=es-docker-cluster
+  #     - discovery.seed_hosts=es02,es03
+  #     - cluster.initial_master_nodes=es01,es02,es03
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - ELASTIC_PASSWORD=1024h95GU95aHaEnsaKQ
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - data01:/usr/share/elasticsearch/data
+  #     - ./scripts/elastic.search-init.sh:/docker-entrypoint-initdb.d/elastic.search-init.sh:ro
+  #   ports:
+  #     - 9200:9200
+  #   networks:
+  #     - elastic
+  # es02:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+  #   container_name: es02
+  #   environment:
+  #     - node.name=es02
+  #     - cluster.name=es-docker-cluster
+  #     - discovery.seed_hosts=es01,es03
+  #     - cluster.initial_master_nodes=es01,es02,es03
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - ELASTIC_PASSWORD=1024h95GU95aHaEnsaKQ
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - data02:/usr/share/elasticsearch/data
+  #     - ./scripts/elastic.search-init.sh:/docker-entrypoint-initdb.d/elastic.search-init.sh:ro
+  #   networks:
+  #     - elastic
+  # es03:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+  #   container_name: es03
+  #   environment:
+  #     - node.name=es03
+  #     - cluster.name=es-docker-cluster
+  #     - discovery.seed_hosts=es01,es02
+  #     - cluster.initial_master_nodes=es01,es02,es03
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - ELASTIC_PASSWORD=1024h95GU95aHaEnsaKQ
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   command: [sudo, sysctl, -w, vm.max_map_count=262144]
+  #   volumes:
+  #     - data03:/usr/share/elasticsearch/data
+  #     - ./scripts/elastic.search-init.sh:/docker-entrypoint-initdb.d/elastic.search-init.sh:ro
+  #   networks:
+  #     - elastic
+
+volumes:
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
+
+networks:
+  my_api_network:
+    driver: bridge
+  elastic:
+    driver: bridge

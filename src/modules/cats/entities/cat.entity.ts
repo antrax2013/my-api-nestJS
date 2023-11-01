@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
-import { Gender } from '../../commons/enums';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Gender } from '../dto/input-cat.dto';
 
 @Entity()
 export class Cat {

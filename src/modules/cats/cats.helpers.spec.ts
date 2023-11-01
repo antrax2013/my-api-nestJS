@@ -1,8 +1,8 @@
 import { ObjectId } from 'mongodb';
 import { Cat } from './entities/cat.entity';
-import { Gender } from '../commons/enums';
 import { CatHelpers } from './cats.helpers';
 import { CreateCatDto } from './dto/create-cat.dto';
+import { Gender } from './dto/input-cat.dto';
 
 describe('CatHelpers', () => {
   describe('getAge', () => {
