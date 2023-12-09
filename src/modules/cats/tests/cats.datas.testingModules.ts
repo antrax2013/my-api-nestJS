@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
-import { Gender } from '../../commons/enums';
 import { Cat } from '../entities/cat.entity';
+import { Gender } from '../dto/input-cat.dto';
 
 export const newBornCat: Cat = {
   _id: new ObjectId('650e08eaec48713df8a05bf5'),

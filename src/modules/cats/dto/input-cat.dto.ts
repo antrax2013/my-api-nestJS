@@ -6,9 +6,13 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { Gender } from '../../commons/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
+
+export enum Gender {
+  Male = 'm',
+  Female = 'f',
+}
 
 export class InputCatDto {
   @ApiProperty({

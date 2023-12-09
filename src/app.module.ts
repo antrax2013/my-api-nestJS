@@ -15,7 +15,7 @@ import { ConfigModule } from '@nestjs/config';
       port: parseInt(process.env.DATABASE_PORT, 10),
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
-      database: 'animals',
+      database: process.env.DATABASE_NAME,
       entities: [Cat],
       synchronize: true,
     }),
