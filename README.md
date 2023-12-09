@@ -1,7 +1,6 @@
 Small API to play with :
 
-- NestJS / TypeORM & MongoDB
-- Build by GitHub Action
+- NestJS / TypeORM & MongoDB / Elastic Search & Kibanna and Docker
 
 ## Installation
 
